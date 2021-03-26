@@ -1,0 +1,22 @@
+TODO
+ajouter le ==, || (OR), le >= et <=
+boucle for
+le if sans else
+
+la surcharge de fonctions ? C'est chaud il parait
+
+dans l'arbre syntaxique abstrait
+raw_expression : sans les num de ligne
+
+
+parser : 
+gestion des priorités,
+on rend un arbre syntaxique abstrait
+
+typechecking
+insérer typage du == sous la ligne 141 a peu pret
+
+  __
+/X X \
+| __ |
+\____/
