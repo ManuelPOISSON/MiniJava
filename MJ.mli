@@ -15,6 +15,7 @@ type expression =
   | EThis
   | EObjectAlloc of identifier
 
+
 and constant = LMJ.constant =
   | ConstBool of bool
   | ConstInt of int32
@@ -26,6 +27,7 @@ and binop = LMJ.binop =
   | OpMul
   | OpLt
   | OpAnd
+  | OpEqual
 
 and unop = LMJ.unop = UOpNot
 

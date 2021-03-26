@@ -8,7 +8,7 @@
 %token INTEGER BOOLEAN
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
-%token PLUS MINUS TIMES NOT LT AND OR
+%token PLUS MINUS TIMES NOT LT LEQT GT GEQT AND OR EQUAL (** add for implementation of == *)
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -18,11 +18,12 @@
 %token EOF
 
 %left AND OR
-%nonassoc LT
+%nonassoc GT LT LEQT GEQT EQUAL
 %left PLUS MINUS
 %left TIMES
 %nonassoc NOT
 %nonassoc DOT LBRACKET
+
 
 %start program
 
@@ -147,6 +148,7 @@ raw_expression:
 | MINUS { OpSub }
 | TIMES { OpMul }
 | LT    { OpLt }
+| EQUAL {OpEqual} (** add for implementation of == *)
 | AND   { OpAnd }
 
 instruction:
