@@ -32,6 +32,8 @@ and binop =
   | OpMul (** Binary operator [*]. *)
   | OpLt  (** Binary operator [<]. *)
   | OpAnd (** Binary operator [&&]. *)
+  | OpEqual (** Binary operator [==]. *)
+
 
 and unop = UOpNot (** Unary operator [!]. *)
 

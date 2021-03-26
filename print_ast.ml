@@ -79,6 +79,8 @@ let print_binop out = function
      fprintf out "OpMul"
   | OpLt  ->
      fprintf out "OpLt"
+  | OpEqual ->
+     fprintf out "OpEqual"
   | OpAnd ->
      fprintf out "OpAnd"
 
