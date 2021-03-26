@@ -19,6 +19,7 @@ and constant = LMJ.constant =
   | ConstBool of bool
   | ConstInt of int32
 
+  (** Add Binary operators *)
 and binop = LMJ.binop =
   | OpAdd
   | OpSub

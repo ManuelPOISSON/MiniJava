@@ -8,7 +8,7 @@
 %token INTEGER BOOLEAN
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
-%token PLUS MINUS TIMES NOT LT AND
+%token PLUS MINUS TIMES NOT LT AND OR
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -17,7 +17,7 @@
 %token IF ELSE WHILE
 %token EOF
 
-%left AND
+%left AND OR
 %nonassoc LT
 %left PLUS MINUS
 %left TIMES
@@ -141,6 +141,7 @@ raw_expression:
 | NOT e = expression
    { EUnOp (UOpNot, e) }
 
+(** Add Binary operators *)
 %inline binop:
 | PLUS  { OpAdd }
 | MINUS { OpSub }
