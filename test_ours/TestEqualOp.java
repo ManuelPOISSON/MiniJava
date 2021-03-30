@@ -1,11 +1,11 @@
-class Print42 {
+class TestEq {
     public static void main(String[] a) {
-            Boolean testEq = 1 == 1;
-            if (testEq) {
-                System.out.println("eq works");
+            /* Boolean testEq = 1 == 1; */
+            if (1==1) {
+                System.out.println(2);
             } else {
-                System.out.println("eq works here too");
+                System.out.println(3);
             }
-            
+
     }
 }
