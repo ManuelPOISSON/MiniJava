@@ -137,6 +137,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
       in
       typecheck_expression_expecting cenv venv vinit instanceof expected e;
       returned
+  
+  | EBinOp(OpEqual, e1, e2) ->
+    let t1 = typecheck_expression cenv venv vinit instanceof e1 in
+    let t2 = typecheck_expression cenv venv  vinit instanceof e2 in
+    if (compatible t1 t2 instanceof) || (compatible t2 t1 instanceof) then
+      TypBool
+    else
+      error e (sprintf "can't compare type %s with %s" (type_to_string t1) (type_to_string t2))
 
   | EBinOp (op, e1, e2) ->
       let expected, returned =
@@ -145,8 +153,11 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpSub
         | OpMul -> TypInt, TypInt
         | OpLt  -> TypInt, TypBool
-        | OpEqual -> TypInt, TypBool
-        | OpAnd -> TypBool, TypBool (** question pourquoi 2 TypBool pour lui (different de OpLt?)*)
+        
+      (** question pourquoi 2 TypBool ci-dessous (different de OpLt?)
+      reponse : c'est expectedType (operand), returnedType
+      *)
+        | OpAnd -> TypBool, TypBool 
       in
       typecheck_expression_expecting cenv venv vinit instanceof expected e1;
       typecheck_expression_expecting cenv venv vinit instanceof expected e2;
