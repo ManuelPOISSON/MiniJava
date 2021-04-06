@@ -141,6 +141,13 @@ let rec instr out = function
         instr i1
         nl
         instr i2
+  | IIfNoElse (c, i1) ->
+      fprintf out "if (%a) %a%t"
+         expr c
+         instr i1
+         nl
+
+
   | IWhile (c, i) ->
       fprintf out "while (%a) %a"
         expr c

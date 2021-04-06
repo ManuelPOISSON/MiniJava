@@ -216,6 +216,10 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
        vinit
        instructions
 
+  | IIfNoElse (cond, ithen) ->
+    typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
+    typecheck_instruction cenv venv vinit instanceof ithen
+
   | IIf (cond, ithen, ielse) ->
     typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
     let vinit1 =
