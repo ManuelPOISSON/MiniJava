@@ -65,7 +65,7 @@ rule get_token = parse
   | "if"    { IF }
   | "else"  { ELSE }
   | "while" { WHILE }
-  | "for"   { FOR }
+  (* | "for"   { FOR } *)
   | integer as i
       {
         try
