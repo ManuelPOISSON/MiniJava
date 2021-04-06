@@ -83,6 +83,12 @@ let print_binop out = function
      fprintf out "OpEqual"
   | OpAnd ->
      fprintf out "OpAnd"
+  | OpGt -> 
+     fprintf out ">"
+  | OpLEqual -> 
+     fprintf out "<="
+  | OpGEqual -> 
+     fprintf out ">="
 
 (** [print_expression prefix out e] prints the expression [e] on the output channel [out].
     [prefix] is the string already printed just before [e]. *)

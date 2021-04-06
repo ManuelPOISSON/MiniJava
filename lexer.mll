@@ -30,7 +30,10 @@ rule get_token = parse
   | '*'       { TIMES }
   | "&&"      { AND }
   | "<"       { LT }
-  | "=="      { EQUAL} (** add for implementation of == *)
+  | ">"       { GT }
+  | "=="      { EQUAL}
+  | "<="      { LEQT }
+  | ">="      { GEQT }
   | '('       { LPAREN }
   | ')'       { RPAREN }
   | '['       { LBRACKET }
@@ -62,6 +65,7 @@ rule get_token = parse
   | "if"    { IF }
   | "else"  { ELSE }
   | "while" { WHILE }
+  | "for"   { FOR }
   | integer as i
       {
         try

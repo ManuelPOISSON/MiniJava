@@ -148,8 +148,11 @@ raw_expression:
 | MINUS { OpSub }
 | TIMES { OpMul }
 | LT    { OpLt }
-| EQUAL {OpEqual} (** add for implementation of == *)
+| GT    { OpGt }
+| EQUAL { OpEqual } (** add for implementation of == *)
 | AND   { OpAnd }
+| LEQT  { OpLEqual }
+| GEQT  { OpGEqual }
 
 instruction:
 | b = block

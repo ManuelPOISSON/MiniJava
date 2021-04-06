@@ -25,9 +25,12 @@ and binop = LMJ.binop =
   | OpAdd
   | OpSub
   | OpMul
-  | OpLt
+  | OpLt  (** Binary operator [<]. *)
+  | OpGt  (** Binary operator [>]. *)
   | OpAnd
-  | OpEqual
+  | OpEqual (** Binary operator [==]. *)
+  | OpLEqual (** Binary operator [<=]. *)
+  | OpGEqual (** Binary operator [>=]. *)
 
 and unop = LMJ.unop = UOpNot
 

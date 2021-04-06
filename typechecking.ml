@@ -152,12 +152,12 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpAdd
         | OpSub
         | OpMul -> TypInt, TypInt
-        | OpLt  -> TypInt, TypBool
-        
-      (** question pourquoi 2 TypBool ci-dessous (different de OpLt?)
-      reponse : c'est expectedType (operand), returnedType
-      *)
-        | OpAnd -> TypBool, TypBool 
+        | OpLt  -> TypInt, TypBool (** compare deux types int et retourne un type bool*)
+
+        | OpAnd -> TypBool, TypBool (** compare deux types bool et retourne un type bool*)
+        | OpGt -> TypInt, TypBool
+        | OpLEqual -> TypInt, TypBool
+        | OpGEqual -> TypInt, TypBool
       in
       typecheck_expression_expecting cenv venv vinit instanceof expected e1;
       typecheck_expression_expecting cenv venv vinit instanceof expected e2;
