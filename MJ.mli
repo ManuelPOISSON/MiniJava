@@ -28,6 +28,7 @@ and binop = LMJ.binop =
   | OpLt  (** Binary operator [<]. *)
   | OpGt  (** Binary operator [>]. *)
   | OpAnd
+  | OpOr  (** Binary operator [||]. *)
   | OpEqual (** Binary operator [==]. *)
   | OpLEqual (** Binary operator [<=]. *)
   | OpGEqual (** Binary operator [>=]. *)

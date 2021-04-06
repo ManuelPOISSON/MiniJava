@@ -24,7 +24,7 @@ Statement ::= '{' Statement* '}'
         | Identifier '=' Expression ';'
         | Identifier '[' Expression ']' '=' Expression ';'
 
-Expression ::= Expression ( '&&' | '<' | '+' | '-' | '*' ajout pour == ) Expression
+Expression ::= Expression ( '&&' | '<' | '+' | '-' | '*' | '=='| '||' ) Expression
         | Expression '[' Expression ']'
         | Expression '.' 'length'
         | Expression '.' Identifier '(' ( Expression ( ',' Expression )* )? ')'

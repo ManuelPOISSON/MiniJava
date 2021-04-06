@@ -83,6 +83,8 @@ let print_binop out = function
      fprintf out "OpEqual"
   | OpAnd ->
      fprintf out "OpAnd"
+  | OpOr ->
+     fprintf out "OpOr"
   | OpGt -> 
      fprintf out ">"
   | OpLEqual -> 

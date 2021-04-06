@@ -151,6 +151,7 @@ raw_expression:
 | GT    { OpGt }
 | EQUAL { OpEqual } (** add for implementation of == *)
 | AND   { OpAnd }
+| OR    { OpOr }
 | LEQT  { OpLEqual }
 | GEQT  { OpGEqual }
 

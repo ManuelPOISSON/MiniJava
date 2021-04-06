@@ -154,7 +154,8 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpMul -> TypInt, TypInt
         | OpLt  -> TypInt, TypBool (** compare deux types int et retourne un type bool*)
 
-        | OpAnd -> TypBool, TypBool (** compare deux types bool et retourne un type bool*)
+        | OpAnd (** compare deux types bool et retourne un type bool*)
+        | OpOr -> TypBool, TypBool
         | OpGt -> TypInt, TypBool
         | OpLEqual -> TypInt, TypBool
         | OpGEqual -> TypInt, TypBool
