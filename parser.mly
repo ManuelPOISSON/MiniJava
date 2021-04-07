@@ -10,7 +10,7 @@
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
 %token PLUS MINUS TIMES NOT LT LEQT GT GEQT AND OR EQUAL (** add for implementation of == *)
 %token COMMA SEMICOLON
-%token ASSIGN
+%token ASSIGN MINUSMINUS
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
 %token THIS NEW DOT LENGTH
 %token SYSO
@@ -164,6 +164,9 @@ instruction:
 | id = IDENT ASSIGN e = expression SEMICOLON
    { ISetVar (id, e) }
 
+(*| id = IDENT MINUSMINUS SEMICOLON
+   { ISetVar (id, EBinOp (OpSub, EGetVar (id), ConstInt (1)) ) }*)
+
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON
    { IArraySet (a, i, e) }
 
@@ -172,6 +175,7 @@ instruction:
 
 | IF LPAREN c = expression RPAREN i1 = instruction ELSE i2 = instruction
    { IIf (c, i1, i2) }
+
 | IF LPAREN c = expression RPAREN i1 = instruction %prec NOELSE
    { IIfNoElse (c, i1) }
 

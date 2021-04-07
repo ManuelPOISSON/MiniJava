@@ -1,4 +1,5 @@
-class TestPlusPlus {
+
+class TestForLoop {
     public static void main(String[] args) {
         System.out.println(new Main().test());          
     }
@@ -6,16 +7,10 @@ class TestPlusPlus {
 
 class Main {
     public int test(){
-        int a ;
-        int b ;
-        int[] tab1 ;
-        int[] tab2 ;
-        a = 1;
-        a = a + 1;
-
-        System.out.println(a);
-        a = a+1;
-        System.out.println(a);
+        int i;
+        for(i = 0; i < 5; i = i+1) {
+            System.out.println(i);
+        }
 
         return 0;
 
