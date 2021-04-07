@@ -50,10 +50,20 @@ let print_token show_loc out = function
      fprintf out "TIMES"
   | NOT ->
      fprintf out "NOT"
+  | EQUAL -> 
+     fprintf out "EQUAL"
   | LT ->
      fprintf out "LT"
+  | GT -> 
+     fprintf out "GT"
+  | LEQT -> 
+     fprintf out "LEQT"
+  | GEQT -> 
+     fprintf out "GEQT"
   | AND ->
      fprintf out "AND"
+  | OR -> 
+     fprintf out "OR"
   | COMMA ->
      fprintf out "COMMA"
   | SEMICOLON ->
@@ -88,6 +98,8 @@ let print_token show_loc out = function
      fprintf out "ELSE"
   | WHILE ->
      fprintf out "WHILE"
+  | FOR -> 
+     fprintf out "FOR"
   | EOF ->
      fprintf out "EOF"
 

@@ -49,7 +49,6 @@ rule get_token = parse
   | "int"     { INTEGER }
   | "boolean" { BOOLEAN }
   | "!"       { NOT }
-  | ","       { COMMA }
   | "class"   { CLASS }
   | "public"  { PUBLIC }
   | "static"  { STATIC }

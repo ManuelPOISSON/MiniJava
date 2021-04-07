@@ -18,7 +18,7 @@ Type ::= 'int' '[' ']'
 Statement ::= '{' Statement* '}'
         | 'if' '(' Expression ')' Statement 'else' Statement
         | 'if' '(' Expression ')' Statement
-        | 'for' '(' Expression ';' Expression ';' Expression ')' Statement
+        | 'for' '(' Identifier '=' 'int' ';' Expression ';' Identifier '=' Expression ')' Statement
         | 'while' '(' Expression ')' Statement
         | 'System.out.println' '(' Expression ')' ';'
         | Identifier '=' Expression ';'

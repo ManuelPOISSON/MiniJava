@@ -508,6 +508,22 @@ let instr2c
        fprintf out "while (%a) %a"
          (expr2c method_name class_info) c
          instr2c i
+    
+    | IFor (id1, e1, c, id2, e2, loop) ->
+       let id1_class = ClassInfo.class_of method_name id1 class_info in
+       let id2_class = ClassInfo.class_of method_name id2 class_info in
+       let e1_class = get_class method_name class_info e1 in
+       let e2_class = get_class method_name class_info e2 in
+       fprintf out "for(%a = %s%a ; %a ; %a = %s%a) %t%a"
+         (var2c method_name class_info) id1
+         (if id1_class <> e1_class then sprintf "(struct %s*) " id1_class else "")
+         (expr2c method_name class_info) e1
+         (expr2c method_name class_info) c 
+         (var2c method_name class_info) id2
+         (if id2_class <> e2_class then sprintf "(struct %s*) " id2_class else "")
+         (expr2c method_name class_info) e2
+         nl
+         instr2c loop
 
     | IBlock is ->
        fprintf out "{%a%t}"

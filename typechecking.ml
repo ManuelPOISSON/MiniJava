@@ -145,7 +145,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpSub
         | OpMul -> TypInt, TypInt
         | OpLt  -> TypInt, TypBool (** compare deux types int et retourne un type bool*)
-        | OpEqual -> TypInt, TypBool | TypBool, TypBool
+        | OpEqual -> TypInt, TypBool
         | OpAnd -> TypBool, TypBool (** compare deux types bool et retourne un type bool*)
         | OpGt -> TypInt, TypBool
         | OpLEqual -> TypInt, TypBool
@@ -220,6 +220,14 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
   | IWhile (cond, ibody) ->
     typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
     typecheck_instruction cenv venv vinit instanceof ibody
+
+  | IFor (id1, e1, c, id2, e2, loop) -> 
+  let vinit = S.add (Location.content id1) vinit in
+  typecheck_expression_expecting cenv venv vinit instanceof (vlookup id1 venv) e1;
+  typecheck_expression_expecting cenv venv vinit instanceof TypBool c;
+  let vinit = S.add (Location.content id2) vinit in
+  typecheck_expression_expecting cenv venv vinit instanceof (vlookup id2 venv) e2;
+  typecheck_instruction cenv venv vinit instanceof loop
 
   | ISyso e ->
      typecheck_expression_expecting cenv venv vinit instanceof TypInt e;
