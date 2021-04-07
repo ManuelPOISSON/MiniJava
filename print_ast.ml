@@ -83,6 +83,8 @@ let print_binop out = function
      fprintf out "OpEqual"
   | OpAnd ->
      fprintf out "OpAnd"
+  | OpOr ->
+     fprintf out "OpOr"
   | OpGt -> 
      fprintf out ">"
   | OpLEqual -> 
@@ -198,6 +200,18 @@ let rec print_instruction prefix out i =
        prefix'
        branch_end
        (print_instruction prefix') i2
+
+  | IIfNoElse (e, i1) ->
+    fprintf out "IIfNoElse\n%s%s%a\n%s%s%a\n%s%s"
+    prefix'
+    branch
+    (print_expression (prefix' ^ pipe)) e
+    prefix'
+    branch
+    (print_instruction (prefix' ^ pipe)) i1
+    prefix'
+    branch_end
+  
   | IWhile (e, i) ->
      fprintf out "IWhile\n%s%s%a\n%s%s%a"
        prefix'

@@ -137,6 +137,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
       in
       typecheck_expression_expecting cenv venv vinit instanceof expected e;
       returned
+  
+  | EBinOp(OpEqual, e1, e2) ->
+    let t1 = typecheck_expression cenv venv vinit instanceof e1 in
+    let t2 = typecheck_expression cenv venv  vinit instanceof e2 in
+    if (compatible t1 t2 instanceof) || (compatible t2 t1 instanceof) then
+      TypBool
+    else
+      error e (sprintf "can't compare type %s with %s" (type_to_string t1) (type_to_string t2))
 
   | EBinOp (op, e1, e2) ->
       let expected, returned =
@@ -145,8 +153,8 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpSub
         | OpMul -> TypInt, TypInt
         | OpLt  -> TypInt, TypBool (** compare deux types int et retourne un type bool*)
-        | OpEqual -> TypInt, TypBool
-        | OpAnd -> TypBool, TypBool (** compare deux types bool et retourne un type bool*)
+        | OpAnd (** compare deux types bool et retourne un type bool*)
+        | OpOr -> TypBool, TypBool
         | OpGt -> TypInt, TypBool
         | OpLEqual -> TypInt, TypBool
         | OpGEqual -> TypInt, TypBool
@@ -206,6 +214,10 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
          typecheck_instruction cenv venv vinit instanceof inst)
        vinit
        instructions
+
+  | IIfNoElse (cond, ithen) ->
+    typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
+    typecheck_instruction cenv venv vinit instanceof ithen
 
   | IIf (cond, ithen, ielse) ->
     typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;

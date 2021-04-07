@@ -1,7 +1,12 @@
 TODO
-ajouter le ==, || (OR), le >= et <=
 boucle for
 le if sans else
+i++ et i--
+
+
+DONE
+== pour les types int, bool, Object
+operator ||, >=, <=
 
 la surcharge de fonctions ? C'est chaud il parait
 

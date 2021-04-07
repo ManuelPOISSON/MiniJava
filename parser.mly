@@ -17,6 +17,8 @@
 %token IF ELSE WHILE FOR
 %token EOF
 
+%nonassoc NOELSE
+%nonassoc ELSE
 %left AND OR
 %nonassoc GT LT LEQT GEQT EQUAL
 %left PLUS MINUS
@@ -151,6 +153,7 @@ raw_expression:
 | GT    { OpGt }
 | EQUAL { OpEqual } (** add for implementation of == *)
 | AND   { OpAnd }
+| OR    { OpOr }
 | LEQT  { OpLEqual }
 | GEQT  { OpGEqual }
 
@@ -169,6 +172,8 @@ instruction:
 
 | IF LPAREN c = expression RPAREN i1 = instruction ELSE i2 = instruction
    { IIf (c, i1, i2) }
+| IF LPAREN c = expression RPAREN i1 = instruction %prec NOELSE
+   { IIfNoElse (c, i1) }
 
 | WHILE LPAREN c = expression RPAREN i = instruction
    { IWhile (c, i) }

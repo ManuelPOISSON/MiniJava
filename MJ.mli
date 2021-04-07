@@ -28,6 +28,7 @@ and binop = LMJ.binop =
   | OpLt  (** Binary operator [<]. *)
   | OpGt  (** Binary operator [>]. *)
   | OpAnd
+  | OpOr  (** Binary operator [||]. *)
   | OpEqual (** Binary operator [==]. *)
   | OpLEqual (** Binary operator [<=]. *)
   | OpGEqual (** Binary operator [>=]. *)
@@ -37,6 +38,7 @@ and unop = LMJ.unop = UOpNot
 and instruction =
   | IBlock of instruction list
   | IIf of expression * instruction * instruction
+  | IIfNoElse of expression * instruction
   | IWhile of expression * instruction
   | IFor of identifier * expression * expression * identifier * expression * instruction
   | ISyso of expression

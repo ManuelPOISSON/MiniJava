@@ -27,6 +27,8 @@ let binop out = function
      fprintf out "==" 
   | OpAnd ->
      fprintf out "&&"
+  | OpOr ->
+      fprintf out "||"
   | OpGt -> 
      fprintf out ">"
   | OpLEqual -> 
@@ -111,7 +113,7 @@ and expr5 out = function
      expr4 out e
 
 and expr6 out = function
-  | EBinOp ((OpLt | OpAnd | OpEqual | OpGt | OpLEqual | OpGEqual) as op, e1, e2) ->
+  | EBinOp ((OpLt | OpAnd | OpOr | OpEqual | OpGt | OpLEqual | OpGEqual) as op, e1, e2) ->
      fprintf out "%a %a %a"
        expr6 e1
        binop op
@@ -139,6 +141,13 @@ let rec instr out = function
         instr i1
         nl
         instr i2
+  | IIfNoElse (c, i1) ->
+      fprintf out "if (%a) %a%t"
+         expr c
+         instr i1
+         nl
+
+
   | IWhile (c, i) ->
       fprintf out "while (%a) %a"
         expr c

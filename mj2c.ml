@@ -320,6 +320,7 @@ let binop2c
   | OpLt  -> fprintf out "<"
   | OpEqual -> fprintf out "=="
   | OpAnd -> fprintf out "&&"
+  | OpOr -> fprintf out "||"
   | OpGt -> fprintf out ">"
   | OpLEqual -> fprintf out "<="
   | OpGEqual -> fprintf out ">="
@@ -503,6 +504,11 @@ let instr2c
          instr2c i1
          nl
          instr2c i2
+    | IIfNoElse (c, i1) ->
+      fprintf out "if (%a) %a%t"
+        (expr2c method_name class_info) c
+        instr2c i1
+        nl (* new line*)
 
     | IWhile (c, i) ->
        fprintf out "while (%a) %a"
