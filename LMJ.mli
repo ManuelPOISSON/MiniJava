@@ -51,6 +51,7 @@ and instruction =
   | ISyso of expression (** [ISyso e] represents the instruction [System.out.println(e);]. *)
   | ISetVar of identifier * expression (** [ISetVar (id, e)] represents the instruction [id = e;]. *)
   | IArraySet of identifier * expression * expression (** [IArraySet (id, e1, e2)] represents the instruction [id[e1] = e2;]. *)
+  | ISetVarPlus of identifier (** [ISetVarPlus] (id) represents the instruction [id ++]. *)
 
 and typ =
   | TypInt (** Type [int]. *)

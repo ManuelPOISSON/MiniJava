@@ -164,8 +164,18 @@ instruction:
 | id = IDENT ASSIGN e = expression SEMICOLON
    { ISetVar (id, e) }
 
-(*| id = IDENT MINUSMINUS SEMICOLON
-   { ISetVar (id, EBinOp (OpSub, EGetVar (id), ConstInt (1)) ) }*)
+| id = IDENT MINUSMINUS SEMICOLON
+   { ISetVar (id, 
+      Location.make $startpos $endpos (EBinOp 
+         (OpSub, ( Location.make $startpos $endpos
+                     (EGetVar (id)), ConstInt (1)
+                     )
+                     )
+                     ) 
+                     ) }
+
+(*| id = IDENT PLUSPLUS SEMICOLON
+   { ISetVarPlus (id) }*)
 
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON
    { IArraySet (a, i, e) }

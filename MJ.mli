@@ -44,6 +44,7 @@ and instruction =
   | ISyso of expression
   | ISetVar of identifier * expression
   | IArraySet of identifier * expression * expression
+  | ISetVarPlus of identifier
 
 and typ =
   | TypInt

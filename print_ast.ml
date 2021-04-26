@@ -253,6 +253,10 @@ let rec print_instruction prefix out i =
        prefix'
        branch_end
        (print_expression prefix') e
+
+  (*| ISetVarPlus (id) -> 
+     fprintf out "ISetVar"*)
+
   | IArraySet (id, e1, e2) ->
      fprintf out "IArraySet\n%s%s%a\n%s%s%a\n%s%s%a"
        prefix'
