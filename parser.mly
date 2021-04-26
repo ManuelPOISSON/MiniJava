@@ -165,14 +165,21 @@ instruction:
    { ISetVar (id, e) }
 
 | id = IDENT MINUSMINUS SEMICOLON
-   { ISetVar (id, 
-      Location.make $startpos $endpos (EBinOp 
-         (OpSub, ( Location.make $startpos $endpos
-                     (EGetVar (id)), ConstInt (1)
-                     )
-                     )
-                     ) 
-                     ) }
+   { ISetVar (
+      id, 
+      Location.make $startpos $endpos (
+         EBinOp (
+            OpSub,
+            ( Location.make $startpos $endpos
+               (EGetVar (id))
+            ),
+            ( Location.make $startpos $endpos
+               (EConst (ConstInt 1l))
+            )
+         )
+      ) 
+   )
+   }
 
 (*| id = IDENT PLUSPLUS SEMICOLON
    { ISetVarPlus (id) }*)
