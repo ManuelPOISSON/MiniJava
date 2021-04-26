@@ -1,12 +1,14 @@
 TODO
-boucle for
-le if sans else
-i++ et i--
+print boolean
+
 
 
 DONE
 == pour les types int, bool, Object
 operator ||, >=, <=
+i++ et i--
+boucle for
+le if sans else
 
 la surcharge de fonctions ? C'est chaud il parait
 
