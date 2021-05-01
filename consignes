@@ -1,16 +1,16 @@
 TODO
 print boolean
-+=
--=
-++ in for loop
+
+-- et ++ in for loop
 
 
 DONE
 == pour les types int, bool, Object
 operator ||, >=, <=
-i++ et i--
+i++ et i-- += -=
 boucle for
 le if sans else
+
 
 la surcharge de fonctions ? C'est chaud il parait
 

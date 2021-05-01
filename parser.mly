@@ -10,7 +10,7 @@
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
 %token PLUS MINUS TIMES NOT LT LEQT GT GEQT AND OR EQUAL (** add for implementation of == *)
 %token COMMA SEMICOLON
-%token ASSIGN MINUSMINUS PLUSPLUS
+%token ASSIGN MINUSMINUS PLUSPLUS PLUSEQ MINUSEQ
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
 %token THIS NEW DOT LENGTH
 %token SYSO
@@ -197,8 +197,39 @@ instruction:
    )
    }
 
-(*| id = IDENT PLUSPLUS SEMICOLON
-   { ISetVarPlus (id) }*)
+| id = IDENT PLUSEQ i_const = INT_CONST SEMICOLON
+      { ISetVar (
+      id, 
+      Location.make $startpos $endpos (
+         EBinOp (
+            OpAdd,
+            ( Location.make $startpos $endpos
+               (EGetVar (id))
+            ),
+            ( Location.make $startpos $endpos
+               (EConst (ConstInt i_const))
+            )
+         )
+      ) 
+   )
+   }
+
+| id = IDENT MINUSEQ i_const = INT_CONST SEMICOLON
+      { ISetVar (
+      id, 
+      Location.make $startpos $endpos (
+         EBinOp (
+            OpSub,
+            ( Location.make $startpos $endpos
+               (EGetVar (id))
+            ),
+            ( Location.make $startpos $endpos
+               (EConst (ConstInt i_const))
+            )
+         )
+      ) 
+   )
+   }
 
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON
    { IArraySet (a, i, e) }

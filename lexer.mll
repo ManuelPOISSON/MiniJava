@@ -68,6 +68,8 @@ rule get_token = parse
   | "for"   { FOR }
   | "--"    { MINUSMINUS }
   | "++"    { PLUSPLUS }
+  | "+="    { PLUSEQ }
+  | "-="    { MINUSEQ }
   | integer as i
       {
         try
