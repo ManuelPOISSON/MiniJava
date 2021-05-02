@@ -158,6 +158,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpGt -> TypInt, TypBool
         | OpLEqual -> TypInt, TypBool
         | OpGEqual -> TypInt, TypBool
+        | OpEqual -> TypInt, TypBool
       in
       typecheck_expression_expecting cenv venv vinit instanceof expected e1;
       typecheck_expression_expecting cenv venv vinit instanceof expected e2;
@@ -186,6 +187,31 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
       clookup id cenv |> ignore;
       Typ id
 
+(** [typecheck_assignation cenv venv vinit instanceof assi] checks, using the environments [cenv] and
+    [venv], the set of initialized variables [vinit] and the [instanceof] function,
+    that the assignation [assi] is well typed.
+    If [typecheck_assignation] succeeds, the new set of initialized variables is returned. *)
+let typecheck_assignation (cenv : class_env) (venv : variable_env) (vinit : S.t)
+    (instanceof : identifier -> identifier -> bool)
+    (assi : assignation) : S.t =
+  match assi with
+  | ISetVar (v, e) ->
+     let vinit =
+       S.add (Location.content v) vinit
+     in
+     typecheck_expression_expecting cenv venv vinit instanceof (vlookup v venv) e;
+     vinit
+  | ISetVarPlus (v) ->
+     let vinit =
+       S.add (Location.content v) vinit
+     in
+     vinit
+  | ISetVarMinus (v) ->
+     let vinit =
+       S.add (Location.content v) vinit
+     in
+     vinit
+
 (** [typecheck_instruction cenv venv vinit instanceof inst] checks, using the environments [cenv] and
     [venv], the set of initialized variables [vinit] and the [instanceof] function,
     that the instruction [inst] is well typed.
@@ -194,13 +220,6 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
     (instanceof : identifier -> identifier -> bool)
     (inst : instruction) : S.t =
   match inst with
-  | ISetVar (v, e) ->
-     let vinit =
-       S.add (Location.content v) vinit
-     in
-     typecheck_expression_expecting cenv venv vinit instanceof (vlookup v venv) e;
-     vinit
-
   | IArraySet (earray, eindex, evalue) ->
     typecheck_expression_expecting cenv venv vinit instanceof TypIntArray
       (Location.make (Location.startpos earray) (Location.endpos earray) (EGetVar earray));
@@ -209,11 +228,16 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
     vinit
 
   | IBlock instructions ->
-     List.fold_left
-       (fun vinit inst ->
-         typecheck_instruction cenv venv vinit instanceof inst)
-       vinit
-       instructions
+    List.fold_left
+      (fun vinit inst ->
+        typecheck_instruction cenv venv vinit instanceof inst)
+      vinit
+      instructions
+      
+  | IAssign assign -> 
+    let vinit = 
+      typecheck_assignation cenv venv vinit instanceof assign
+    in vinit
 
   | IIfNoElse (cond, ithen) ->
     typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
@@ -233,13 +257,20 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
     typecheck_expression_expecting cenv venv vinit instanceof TypBool cond;
     typecheck_instruction cenv venv vinit instanceof ibody
 
-  | IFor (id1, e1, c, id2, e2, loop) -> 
-  let vinit = S.add (Location.content id1) vinit in
-  typecheck_expression_expecting cenv venv vinit instanceof (vlookup id1 venv) e1;
-  typecheck_expression_expecting cenv venv vinit instanceof TypBool c;
-  let vinit = S.add (Location.content id2) vinit in
-  typecheck_expression_expecting cenv venv vinit instanceof (vlookup id2 venv) e2;
-  typecheck_instruction cenv venv vinit instanceof loop
+  | IFor (id1, e1, c, a, loop) -> 
+    let vinit = S.add (Location.content id1) vinit in
+    typecheck_expression_expecting cenv venv vinit instanceof (vlookup id1 venv) e1;
+    typecheck_expression_expecting cenv venv vinit instanceof TypBool c;
+    let vinit1 = 
+      typecheck_assignation cenv venv vinit instanceof a
+    in
+    let vinit2 = 
+      typecheck_instruction cenv venv vinit instanceof loop
+    in
+    let intersect v1 v2 v3 = 
+      let v1 = S.inter vinit1 vinit2 in
+      let v2 = S.inter v1 vinit in v2
+    in intersect vinit vinit1 vinit2
 
   | ISyso e ->
      typecheck_expression_expecting cenv venv vinit instanceof TypInt e;

@@ -7,7 +7,7 @@ class TestForLoop {
 class Main {
   public int test() {
     int i;
-    for(i = 0 ; i < 5 ; i = i + 1) 
+    for(i = 0 ; i < 5 ; i = i + 1;) 
     {
       System.out.println(i);
     }
@@ -29,7 +29,8 @@ struct Main {
 void* (*Main_vtable[])() = { Main_test };
 void* Main_test(struct Main* this) {
   int i;
-  for(i = 0 ; (i < 5) ; i = (i + 1)) 
+  for(i = 0 ; (i < 5) ; 
+    i = (i + 1);) 
   {
     printf("%d\n", i);
   }

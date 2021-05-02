@@ -124,12 +124,14 @@ and expr6 out = function
 and expr out e =
   expr6 out e
 
-(** [binop out ins] prints the instruction [ins] on the output channel [out]. *)
-let rec instr out = function
+let rec assign out = function
   | ISetVar (x, e) ->
      fprintf out "%s = %a;"
        x
        expr e
+
+(** [binop out ins] prints the instruction [ins] on the output channel [out]. *)
+let rec instr out = function
   | IArraySet (id, ei, ev) ->
      fprintf out "%s[%a] = %a;"
        id
@@ -147,23 +149,25 @@ let rec instr out = function
          instr i1
          nl
 
-
   | IWhile (c, i) ->
       fprintf out "while (%a) %a"
         expr c
         instr i
-  | IFor (id1, e1, c, id2, e2, loop) -> 
-      fprintf out "for(%s = %a ; %a ; %s = %a) %t%a"
+  | IFor (id1, e1, c, a, loop) -> 
+      fprintf out "for(%s = %a ; %a ; %a) %t%a"
         id1
         expr e1
         expr c
-        id2
-        expr e2
+        assign a
         nl
         instr loop
   | IBlock is ->
      fprintf out "{%a%t}"
        (indent indentation (sep_list nl instr)) is
+       nl
+  | IAssign a ->
+     fprintf out "{%a%t}"
+       (indent indentation (assign)) a
        nl
   | ISyso e ->
      fprintf out "System.out.println(%a);"

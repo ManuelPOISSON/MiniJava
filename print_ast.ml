@@ -176,6 +176,18 @@ and print_raw_expression prefix out e pos =
 and print_expression_list prefix out l =
   print_list print_expression prefix out l
 
+let rec print_assignation prefix out i = 
+   let prefix' = prefix ^ String.make indentation ' ' in
+   match i with
+   | ISetVar (id, e) ->
+     fprintf out "ISetVar\n%s%s%a\n%s%s%a"
+       prefix'
+       branch
+       print_identifier id
+       prefix'
+       branch_end
+       (print_expression prefix') e
+
 (** [print_instruction prefix out ins] prints the instruction [ins] on the output channel [out].
     [prefix] is the string already printed just before [ins]. *)
 let rec print_instruction prefix out i =
@@ -189,6 +201,9 @@ let rec print_instruction prefix out i =
   | IBlock l ->
      fprintf out "IBlock\n%a"
        (print_instruction_list prefix) l
+  | IAssign a -> 
+     fprintf out "IAssign\n%a"
+       (print_assignation prefix) a
   | IIf (e, i1, i2) ->
      fprintf out "IIf\n%s%s%a\n%s%s%a\n%s%s%a"
        prefix'
@@ -202,15 +217,15 @@ let rec print_instruction prefix out i =
        (print_instruction prefix') i2
 
   | IIfNoElse (e, i1) ->
-    fprintf out "IIfNoElse\n%s%s%a\n%s%s%a\n%s%s"
-    prefix'
-    branch
-    (print_expression (prefix' ^ pipe)) e
-    prefix'
-    branch
-    (print_instruction (prefix' ^ pipe)) i1
-    prefix'
-    branch_end
+     fprintf out "IIfNoElse\n%s%s%a\n%s%s%a\n%s%s"
+       prefix'
+       branch
+       (print_expression (prefix' ^ pipe)) e
+       prefix'
+       branch
+       (print_instruction (prefix' ^ pipe)) i1
+       prefix'
+       branch_end
   
   | IWhile (e, i) ->
      fprintf out "IWhile\n%s%s%a\n%s%s%a"
@@ -220,8 +235,8 @@ let rec print_instruction prefix out i =
        prefix'
        branch_end
        (print_instruction prefix') i
-  | IFor (id1, e1, c, id2, e2, loop) -> 
-     fprintf out "IFor\n%s%s\n%s%s%a\n%s%s%a\n%s%s%a\n%s%s\n%s%s%a\n%s%s%a\n%s%s%a"
+  | IFor (id1, e1, c, a, loop) -> 
+     fprintf out "IFor\n%s%s\n%s%s%a\n%s%s%a\n%s%s%a\n%s%s\n%a\n%s%s%a"
        prefix'
        branch
        prefix'
@@ -235,27 +250,10 @@ let rec print_instruction prefix out i =
        (print_expression (prefix' ^ pipe)) c
        prefix'
        branch_end
-       prefix'
-       branch 
-       print_identifier id2
-       prefix'
-       branch_end
-       (print_expression prefix') e2
+       (print_assignation prefix) a
        prefix'
        branch_end
        (print_instruction prefix') loop
-
-  | ISetVar (id, e) ->
-     fprintf out "ISetVar\n%s%s%a\n%s%s%a"
-       prefix'
-       branch
-       print_identifier id
-       prefix'
-       branch_end
-       (print_expression prefix') e
-
-  (*| ISetVarPlus (id) -> 
-     fprintf out "ISetVar"*)
 
   | IArraySet (id, e1, e2) ->
      fprintf out "IArraySet\n%s%s%a\n%s%s%a\n%s%s%a"

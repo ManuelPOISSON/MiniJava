@@ -157,10 +157,7 @@ raw_expression:
 | LEQT  { OpLEqual }
 | GEQT  { OpGEqual }
 
-instruction:
-| b = block
-   { b }
-
+assignation:
 | id = IDENT ASSIGN e = expression SEMICOLON
    { ISetVar (id, e) }
 
@@ -180,6 +177,7 @@ instruction:
       ) 
    )
    }
+
 | id = IDENT PLUSPLUS SEMICOLON
    { ISetVar (
       id, 
@@ -197,8 +195,13 @@ instruction:
    )
    }
 
-(*| id = IDENT PLUSPLUS SEMICOLON
-   { ISetVarPlus (id) }*)
+
+instruction:
+| b = block
+   { b }
+
+| a = assignation
+   { IAssign (a) }
 
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON
    { IArraySet (a, i, e) }
@@ -215,8 +218,8 @@ instruction:
 | WHILE LPAREN c = expression RPAREN i = instruction
    { IWhile (c, i) }
 
-| FOR LPAREN id1 = IDENT ASSIGN e1 = expression SEMICOLON c = expression SEMICOLON id2 = IDENT ASSIGN e2 = expression RPAREN loop = instruction
-   { IFor (id1, e1, c, id2, e2, loop) }
+| FOR LPAREN id1 = IDENT ASSIGN e1 = expression SEMICOLON c = expression SEMICOLON a = assignation RPAREN loop = instruction
+   { IFor (id1, e1, c, a, loop) }
 
 block:
 | LBRACE is = list(instruction) RBRACE
