@@ -195,15 +195,8 @@ assignation:
    )
    }
 
-
-instruction:
-| b = block
-   { b }
-
-| a = assignation
-   { IAssign (a) }
 | id = IDENT PLUSEQ i_const = INT_CONST SEMICOLON
-      { ISetVar (
+   { ISetVar (
       id, 
       Location.make $startpos $endpos (
          EBinOp (
@@ -235,6 +228,14 @@ instruction:
       ) 
    )
    }
+
+
+instruction:
+| b = block
+   { b }
+
+| a = assignation
+   { IAssign (a) }
 
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON
    { IArraySet (a, i, e) }

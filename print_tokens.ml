@@ -102,6 +102,14 @@ let print_token show_loc out = function
      fprintf out "FOR"
   | EOF ->
      fprintf out "EOF"
+  | PLUSPLUS ->
+     fprintf out "PLUSPLUS"
+  | MINUSMINUS ->
+     fprintf out "MINUSMINUS"
+  | PLUSEQ ->
+     fprintf out "PLUSEQ"
+  | MINUSEQ ->
+     fprintf out "MINUSEQ"
 
 let print out lexbuf show_loc =
   let token = ref (Lexer.get_token lexbuf) in
