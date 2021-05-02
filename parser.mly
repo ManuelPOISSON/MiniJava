@@ -158,10 +158,10 @@ raw_expression:
 | GEQT  { OpGEqual }
 
 assignation:
-| id = IDENT ASSIGN e = expression SEMICOLON
+| id = IDENT ASSIGN e = expression
    { ISetVar (id, e) }
 
-| id = IDENT MINUSMINUS SEMICOLON
+| id = IDENT MINUSMINUS
    { ISetVar (
       id, 
       Location.make $startpos $endpos (
@@ -178,7 +178,7 @@ assignation:
    )
    }
 
-| id = IDENT PLUSPLUS SEMICOLON
+| id = IDENT PLUSPLUS
    { ISetVar (
       id, 
       Location.make $startpos $endpos (
@@ -195,7 +195,7 @@ assignation:
    )
    }
 
-| id = IDENT PLUSEQ i_const = INT_CONST SEMICOLON
+| id = IDENT PLUSEQ i_const = INT_CONST
    { ISetVar (
       id, 
       Location.make $startpos $endpos (
@@ -212,7 +212,7 @@ assignation:
    )
    }
 
-| id = IDENT MINUSEQ i_const = INT_CONST SEMICOLON
+| id = IDENT MINUSEQ i_const = INT_CONST
       { ISetVar (
       id, 
       Location.make $startpos $endpos (
@@ -234,7 +234,7 @@ instruction:
 | b = block
    { b }
 
-| a = assignation
+| a = assignation SEMICOLON
    { IAssign (a) }
 
 | a = IDENT LBRACKET i = expression RBRACKET ASSIGN e = expression SEMICOLON

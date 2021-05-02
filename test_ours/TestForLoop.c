@@ -7,14 +7,10 @@ class TestForLoop {
 class Main {
   public int test() {
     int i;
+    for(i = 13 ; i > 7 ; i = i - 1;) 
     {
-      i = 0;
+      System.out.println(i);
     }
-    System.out.println(i);
-    {
-      i = i - 5;
-    }
-    System.out.println(i);
     return 0;
   }
 }*/
@@ -33,14 +29,11 @@ struct Main {
 void* (*Main_vtable[])() = { Main_test };
 void* Main_test(struct Main* this) {
   int i;
+  for(i = 13 ; (i > 7) ; 
+    i = (i - 1)) 
   {
-    i = 0;
+    printf("%d\n", i);
   }
-  printf("%d\n", i);
-  {
-    i = (i - 5);
-  }
-  printf("%d\n", i);
   return (void*)(0);
 }
 int main(int argc, char *argv[]) {

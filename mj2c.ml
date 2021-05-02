@@ -487,17 +487,17 @@ let assign2c
     | ISetVar (x, e) ->
        let x_class = ClassInfo.class_of method_name x class_info in
        let e_class = get_class method_name class_info e in
-       fprintf out "%a = %s%a;"
+       fprintf out "%a = %s%a"
          (var2c method_name class_info) x
          (if x_class <> e_class then sprintf "(struct %s*) " x_class else "")
          (expr2c method_name class_info) e
 
     | ISetVarPlus (x) ->
-       fprintf out "%a ++;"
+       fprintf out "%a ++"
        (var2c method_name class_info) x
 
     | ISetVarMinus (x) ->
-       fprintf out "%a --;"
+       fprintf out "%a --"
        (var2c method_name class_info) x
 
   in
@@ -554,9 +554,8 @@ let instr2c
          nl
     
     | IAssign a ->
-       fprintf out "{%a%t}"
+       fprintf out "%a;"
          (indent indentation (assign2c method_name class_info)) a
-         nl
 
     | ISyso e ->
        fprintf out "printf(\"%%d\\n\", %a);"
