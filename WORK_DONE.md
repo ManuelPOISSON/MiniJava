@@ -1,30 +1,20 @@
-TODO
+
+### A brief sight on the work done
+
+Notre MiniJava reconnaît les structures suivantes :
+
+== pour les types int, bool, Object
+operator ||, >=, <=, &&
+i++ et i-- 
++= et -=
+boucle for comprenant les ++, --, +=, -=
+if avec et sans else
+Un type assignation a été créé pour optimiser la boucle for
 print boolean
 
--- et ++ in for loop
 
 
-DONE
-== pour les types int, bool, Object
-operator ||, >=, <=
-i++ et i-- += -=
-boucle for
-le if sans else
-
-
-la surcharge de fonctions ? C'est chaud il parait
-
-dans l'arbre syntaxique abstrait
-raw_expression : sans les num de ligne
-
-
-parser : 
-gestion des priorités,
-on rend un arbre syntaxique abstrait
-
-typechecking
-insérer typage du == sous la ligne 141 a peu pret
-
+### Other stuff that is not useful for you
   __
 /X X \
 | __ |
