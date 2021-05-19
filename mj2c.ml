@@ -234,18 +234,18 @@ module ClassInfo : ClassInfoType = struct
       | _ -> ""
     
   let type_of m v class_info =
-(*    if is_attribute m v class_info then
+    if is_attribute m v class_info then
       let _, _, t =
         SM.find v class_info.attribute_info
         |> List.hd
       in
       match t with
-      | TypBool -> "boolean"
-      | TypInt  -> "int"
+      | Typ t   -> Typ t
+      | TypInt  -> TypInt
+      | TypBool -> TypBool
+      | TypIntArray -> TypIntArray
 
-      
     else
-      *)
       find_variable_type m v class_info
       
       
@@ -421,24 +421,25 @@ let rec get_type
     | ConstBool _ -> TypBool
     end
   | EMethodCall (o, m, _) ->
-  begin
-    let typ = 
-    get_class method_name class_info o
-    |> get_class_info
-    |> ClassInfo.return_type m
-    in 
-    match typ with
-    | TypInt  -> TypInt
-    | TypBool -> TypBool
-    | TypIntArray -> TypIntArray
-    | Typ t -> Typ t
-  end
+    begin
+      let typ = 
+      get_class method_name class_info o
+      |> get_class_info
+      |> ClassInfo.return_type m
+      in 
+      match typ with
+      | TypInt  -> TypInt
+      | TypBool -> TypBool
+      | TypIntArray -> TypIntArray
+      | Typ t -> Typ t
+    end
+  | EUnOp (unop, expression) -> TypBool
+  | _ -> Printf.sprintf "did not match"; TypInt
 (*
   | EThis -> ClassInfo.class_name class_info
-
   | EObjectAlloc id -> id
 *)
-  
+
 
 (** [expr2c m class_info out e] transpiles the expression [e], in the context of method [m] and [class_info],
     to C on the output channel [out]. *)
