@@ -273,8 +273,12 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
     in intersect vinit vinit1 vinit2
 
   | ISyso e ->
-     typecheck_expression_expecting cenv venv vinit instanceof TypInt e;
-     vinit
+      match typecheck_expression cenv venv vinit instanceof e with
+      | TypBool
+      | TypInt -> vinit
+      | _ -> error e "print type must be int or boolean"
+
+      
 
 (** [occurences x bindings] returns the elements in [bindings] that have [x] has identifier. *)
 let occurrences (x : string) (bindings : (identifier * 'a) list) : identifier list =

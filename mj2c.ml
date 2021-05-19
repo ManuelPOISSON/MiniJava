@@ -62,6 +62,10 @@ module type ClassInfoType = sig
      method [m] in [class_info]. If [v] is of primitive type, the function returns the empty string. *)
   val class_of : string -> string -> t -> string
 
+  (** [type_of m v class_info] returns the class name of variable [v] in the context of the
+    method [m] in [class_info]. If [v] is of primitive type, the function returns the empty string. *)
+  val type_of : string -> string -> t -> MJ.typ
+
   (** [method_class_origin m class_info] returns the name of the class, in the class hierarchy for
       this [class_info], where the method [m] is last defined. *)
   val method_class_origin : string -> t -> string
@@ -228,6 +232,23 @@ module ClassInfo : ClassInfoType = struct
       match find_variable_type m v class_info with
       | Typ t -> t
       | _ -> ""
+    
+  let type_of m v class_info =
+(*    if is_attribute m v class_info then
+      let _, _, t =
+        SM.find v class_info.attribute_info
+        |> List.hd
+      in
+      match t with
+      | TypBool -> "boolean"
+      | TypInt  -> "int"
+
+      
+    else
+      *)
+      find_variable_type m v class_info
+      
+      
 
   let method_class_origin m class_info =
     let orig, _, _ = SM.find m class_info.method_info in
@@ -386,6 +407,39 @@ let rec get_class
 
   | _ -> ""
 
+let rec get_type
+    (method_name : string)
+    (class_info : ClassInfo.t)
+    (e : MJ.expression)
+  : MJ.typ =
+  match e with
+  | EGetVar x -> ClassInfo.type_of method_name x class_info
+  | EConst const -> 
+    begin
+    match const with
+    | ConstInt _ -> TypInt
+    | ConstBool _ -> TypBool
+    end
+  | EMethodCall (o, m, _) ->
+  begin
+    let typ = 
+    get_class method_name class_info o
+    |> get_class_info
+    |> ClassInfo.return_type m
+    in 
+    match typ with
+    | TypInt  -> TypInt
+    | TypBool -> TypBool
+    | TypIntArray -> TypIntArray
+    | Typ t -> Typ t
+  end
+(*
+  | EThis -> ClassInfo.class_name class_info
+
+  | EObjectAlloc id -> id
+*)
+  
+
 (** [expr2c m class_info out e] transpiles the expression [e], in the context of method [m] and [class_info],
     to C on the output channel [out]. *)
 let expr2c
@@ -474,6 +528,7 @@ let expr2c
   in
   expr2c out expr
 
+
 (** [assign2c m class_info out ass] transpiles the instruction [ass], in the context of method [m] and [class_info],
     to C on the output channel [out]. *)
 let assign2c
@@ -558,8 +613,24 @@ let instr2c
          (indent indentation (assign2c method_name class_info)) a
 
     | ISyso e ->
+       let typ_e = get_type method_name class_info e
+       in
+       match typ_e with
+        | TypBool -> fprintf out "{if(%a) { printf(\"true\\n\");} else { printf(\"false\\n\");}}" (expr2c method_name class_info) e
+        | TypInt -> fprintf out "printf(\"%%d\\n\", %a);" (expr2c method_name class_info) e
+        | _ -> fprintf out "printf(\"this type isn't \\n\");"
+        (*
+        | EConst const ->
+          begin
+            match const with
+            | ConstBool b -> fprintf out "printf(\"%%d\\n\", 33);"
+            | ConstInt i  -> fprintf out "printf(\"%%d\\n\", 11);"
+          end
+        | _ -> fprintf out "printf(\"%%d\\n\", 666);"
+        
        fprintf out "printf(\"%%d\\n\", %a);"
          (expr2c method_name class_info) e
+         *)
   in
   instr2c out ins
 
